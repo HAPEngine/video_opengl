@@ -1,0 +1,10 @@
+# Build artifacts
+*.o
+
+/bin
+/lib
+/build
+/Makefile
+
+/cmake_*.cmake
+/CMakeFiles/*
