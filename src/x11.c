@@ -43,7 +43,7 @@ void* window_create(HAPEngine *engine, const int width, const int height) {
 	XVisualInfo *visualInfo;
 
 	if (window == NULL) {
-		fprintf(stderr, "Could not allocate memory to create a window.");
+		(*engine).log_error(engine, "Could not allocate memory to create a window.");
 		return NULL;
 	}
 
@@ -51,21 +51,21 @@ void* window_create(HAPEngine *engine, const int width, const int height) {
 
 	// Occurs when the XServer can't be connected to
 	if ((*window).display == NULL) {
-		fprintf(stderr, "Could not open display. Is there an XServer running?\n");
+		(*engine).log_error(engine, "Could not open display. Is there an XServer running?\n");
 		return NULL;
 	}
 
 	root = DefaultRootWindow((*window).display);
 
 	if (!root) {
-		fprintf(stderr, "Could not find root window.\n");
+		(*engine).log_error(engine, "Could not find root window.\n");
 		root = DefaultRootWindow((*window).display);
 	}
 
 	visualInfo = glXChooseVisual((*window).display, 0, glAttributes);
 
 	if (visualInfo == NULL) {
-		fprintf(stderr, "Couldn't get GLX VisualInfo for XServer.\n");
+		(*engine).log_error(engine, "Couldn't get GLX VisualInfo for XServer.\n");
 		return NULL;
 	}
 

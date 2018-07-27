@@ -65,7 +65,7 @@ void* window_create(HAPEngine *engine, const int width, const int height) {
 	Win32Window* window = calloc(1, sizeof(Win32Window));
 
 	if (window == NULL) {
-		fprintf(stderr, "Could not allocate memory for window. You may be out of RAM.");
+		(*engine).log_error(engine, "Could not allocate memory for window. You may be out of RAM.");
 		return NULL;
 	}
 
@@ -83,7 +83,7 @@ void* window_create(HAPEngine *engine, const int width, const int height) {
 	wc.lpszClassName = windowClassName;
 
 	if (!RegisterClass(&wc)) {
-		fprintf(stderr, "RegisterClass() failed: Cannot register window class.");
+		(*engine).log_error(engine, "RegisterClass() failed: Cannot register window class.");
 		return NULL;
 	}
 
@@ -99,7 +99,7 @@ void* window_create(HAPEngine *engine, const int width, const int height) {
 	);
 
 	if ((*window).ref == NULL) {
-		fprintf(stderr, "CreateWindow() failed:  Cannot create a window.");
+		(*engine).log_error(engine, "CreateWindow() failed:  Cannot create a window.");
 		return NULL;
 	}
 
@@ -116,12 +116,12 @@ void* window_create(HAPEngine *engine, const int width, const int height) {
 
 	pf = ChoosePixelFormat((*window).deviceContext, &pfd);
 	if (pf == 0) {
-		fprintf(stderr, "Could not find a suitable pixel format.");
+		(*engine).log_error(engine, "Could not find a suitable pixel format.");
 		return 0;
 	}
 
 	if (SetPixelFormat((*window).deviceContext, pf, &pfd) == FALSE) {
-		fprintf(stderr, "Could not the expected pixel format.");
+		(*engien).log_error(engine, "Could not the expected pixel format.");
 		return 0;
 	}
 
