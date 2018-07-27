@@ -36,9 +36,7 @@ void load(HAPEngine *engine, void *state, char *identifier) {
 
 
 HAPTime update(HAPEngine *engine, void *state) {
-	if (window_update(state) < 0) return -1;
-	window_render(state);
-	return 0;
+	return ;
 }
 
 
@@ -47,10 +45,14 @@ void unload(HAPEngine *engine, void *state) {
 	(void)state;       // Mark variable as used to avoid compiler warnings
 }
 
+
 void render(HAPEngine *engine, void *state) {
 	(void)engine;      // Mark variable as used to avoid compiler warnings
-	(void)state;       // Mark variable as used to avoid compiler warnings
+
+	if (window_update(state) >= 0)
+		window_render(state);
 }
+
 
 void destroy(HAPEngine *engine, void *state) {
 	(void)engine;      // Mark variable as used to avoid compiler warnings

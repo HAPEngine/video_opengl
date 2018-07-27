@@ -113,6 +113,7 @@ int window_update(void* state) {
 
 	if (window == NULL) return -1;
 
+	// TODO: Non-blocking pulling to not block simulation too long
 	while (XEventsQueued((*window).display, QueuedAfterFlush)) {
 		XNextEvent((*window).display, &event);
 
