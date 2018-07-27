@@ -36,7 +36,7 @@ void* window_create(HAPEngine *engine, const int width, const int height) {
 
     window = (FallbackWindow*) calloc(1, sizeof(FallbackWindow));
     if (window == NULL) {
-        fprintf(stderr, "Failed to .\n");
+        fprintf(stderr, "Failed to allocate space for SDL window.\n");
         return NULL;
     }
 
