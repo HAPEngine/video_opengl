@@ -38,7 +38,6 @@ void load(HAPEngine *engine, void *state, char *identifier) {
 
 HAPTime update(HAPEngine *engine, void *state) {
 	if (window_update(state) < 0) return -1;
-
 	window_render(state);
 	return 0;
 }
