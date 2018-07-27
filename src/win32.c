@@ -166,5 +166,4 @@ void window_close(void* state) {
 	DestroyWindow((*window).ref);
 }
 
-
 #endif

@@ -16,7 +16,7 @@
 #include "window_management.h"
 
 
-void* create(HAPEngine *engine) {
+void* create(HAPEngine *engine, HAPConfigurationSection *configuration) {
 	void *window = window_create(engine, 640, 480);
 
 	if (window == NULL) {
@@ -36,7 +36,7 @@ void load(HAPEngine *engine, void *state, char *identifier) {
 
 
 HAPTime update(HAPEngine *engine, void *state) {
-	return ;
+	return 0;
 }
 
 
