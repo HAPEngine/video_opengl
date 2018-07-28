@@ -1,17 +1,13 @@
-#ifdef OS_Darwin
-
-
-/***
- * NOTE: This is written in Objective-C because MacOS makes me sad
- **/
-
 #include <hap.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <SDL2/SDL.h>
-
 #include "window_management.h"
+
+
+#ifdef OS_Darwin
+
+#include <SDL2/SDL.h>
 
 
 struct FallbackWindow {

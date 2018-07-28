@@ -1,6 +1,6 @@
-#ifdef OS_Windows
-
 #include <hap.h>
+
+#ifdef OS_Windows
 
 #include <stdbool.h>
 #include <stdio.h>
