@@ -2,6 +2,7 @@
 
 #ifdef OS_Windows
 
+#include <Windows.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <GL/gl.h>
@@ -121,7 +122,7 @@ void* window_create(HAPEngine *engine, const int width, const int height) {
 	}
 
 	if (SetPixelFormat((*window).deviceContext, pf, &pfd) == FALSE) {
-		(*engien).log_error(engine, "Could not the expected pixel format.");
+		(*engine).log_error(engine, "Could not the expected pixel format.");
 		return 0;
 	}
 
