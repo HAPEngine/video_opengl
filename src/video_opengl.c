@@ -10,7 +10,7 @@ HAP_MODULE_EXPORT void* create(HAPEngine *engine, HAPConfigurationSection *confi
 	void *window = window_create(engine, 640, 480);
 
 	if (window == NULL) {
-		(*engine).log_error(engine, "Could not create a window.\n");
+		(*engine).log_error(engine, "Could not create a window");
 		return NULL;
 	}
 

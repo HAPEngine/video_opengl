@@ -13,6 +13,8 @@
 
 
 struct Win32Window {
+	HAPEngine*      engine;
+
 	HWND            ref;
 
 	HGLRC           renderingContext;
@@ -26,6 +28,11 @@ typedef struct Win32Window Win32Window;
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	static PAINTSTRUCT ps;
+
+	HAPEngine *engine = NULL;
+	Win32Window *window = GetWindowLongPtr(hWnd, GWLP_USERDATA);
+
+	if (window != NULL) engine = (*window).engine;
 
 	switch (uMsg) {
 	case WM_PAINT:
@@ -48,6 +55,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 		return 0;
 
 	case WM_CLOSE:
+		if (engine) {
+			(*engine).log_info(engine, "System window was closed by the user", (*engine).name);
+			(*engine).isRunning = false;
+		} else {
+			fprintf(stderr, "A window was closed, but %s was unable to get the engine reference.", (*engine).name);
+		}
+
+		return 0;
+
+	case WM_DESTROY:
 		PostQuitMessage(0);
 		return 0;
 	}
@@ -66,11 +83,12 @@ void* window_create(HAPEngine *engine, const int width, const int height) {
 	Win32Window* window = calloc(1, sizeof(Win32Window));
 
 	if (window == NULL) {
-		(*engine).log_error(engine, "Could not allocate memory for window. You may be out of RAM.");
+		(*engine).log_error(engine, "Could not allocate memory for window - you may be out of memory");
 		return NULL;
 	}
 
 	(*window).application = GetModuleHandle(NULL);
+	(*window).engine = engine;
 
 	wc.style = CS_OWNDC;
 	wc.lpfnWndProc = (WNDPROC)WndProc;
@@ -96,11 +114,11 @@ void* window_create(HAPEngine *engine, const int width, const int height) {
 		width, height,
 		NULL, NULL,
 		(*window).application,
-		NULL
+		window
 	);
 
 	if ((*window).ref == NULL) {
-		(*engine).log_error(engine, "CreateWindow() failed:  Cannot create a window.");
+		(*engine).log_error(engine, "CreateWindow() failed:  Cannot create a window");
 		return NULL;
 	}
 
@@ -112,7 +130,7 @@ void* window_create(HAPEngine *engine, const int width, const int height) {
 	pfd.nSize = sizeof(pfd);
 	pfd.nVersion = 1;
 	pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL;
-	pfd.iPixelType = WS_OVERLAPPEDWINDOW | WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
+	pfd.iPixelType = (byte) (WS_OVERLAPPEDWINDOW | WS_CLIPSIBLINGS | WS_CLIPCHILDREN);
 	pfd.cColorBits = 32;
 
 	pf = ChoosePixelFormat((*window).deviceContext, &pfd);
@@ -122,7 +140,7 @@ void* window_create(HAPEngine *engine, const int width, const int height) {
 	}
 
 	if (SetPixelFormat((*window).deviceContext, pf, &pfd) == FALSE) {
-		(*engine).log_error(engine, "Could not the expected pixel format.");
+		(*engine).log_error(engine, "Could not the expected pixel format");
 		return 0;
 	}
 
@@ -132,6 +150,13 @@ void* window_create(HAPEngine *engine, const int width, const int height) {
 
 	(*window).deviceContext = GetDC((*window).ref);
 	(*window).renderingContext = wglCreateContext((*window).deviceContext);
+
+	SetLastError(0);
+	SetWindowLongPtr((*window).ref, GWLP_USERDATA, (LONG_PTR)window);
+
+	if (GetLastError() != 0) {
+		(*engine).log_error(engine, "Failed to assign window context via SetWindowLongPtr");
+	}
 
 	ShowWindow((*window).ref, SW_SHOWNORMAL);
 

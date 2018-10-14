@@ -24,7 +24,7 @@ void* window_create(HAPEngine *engine, const int width, const int height) {
     FallbackWindow *window;
 
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-        (*engine).log_error(engine, "Could not initialize SDL video.\n");
+        (*engine).log_error(engine, "Could not initialize SDL video");
         return NULL;
     }
 
@@ -32,7 +32,7 @@ void* window_create(HAPEngine *engine, const int width, const int height) {
 
     window = (FallbackWindow*) calloc(1, sizeof(FallbackWindow));
     if (window == NULL) {
-        (*engine).log_error(engine, "Failed to allocate space for SDL window.\n");
+        (*engine).log_error(engine, "Failed to allocate space for SDL window");
         return NULL;
     }
 
@@ -46,7 +46,7 @@ void* window_create(HAPEngine *engine, const int width, const int height) {
                     );
 
     if ((*window).ref == NULL) {
-        (*engine).log_error(engine, "Failed to create SDL window.");
+        (*engine).log_error(engine, "Failed to create SDL window");
         return NULL;
     }
 
