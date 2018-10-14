@@ -30,7 +30,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	static PAINTSTRUCT ps;
 
 	HAPEngine *engine = NULL;
-	Win32Window *window = GetWindowLongPtr(hWnd, GWLP_USERDATA);
+	Win32Window *window = (Win32Window*) GetWindowLongPtr(hWnd, GWLP_USERDATA);
 
 	if (window != NULL) engine = (*window).engine;
 
